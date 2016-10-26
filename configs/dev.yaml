@@ -1,0 +1,12 @@
+
+# DB
+database:
+    checkConnectionWhileIdle: true
+    maxConnectionAge: 10s
+    initialSize: 5
+    minSize: 5
+    maxSize: 5
+    user: "admin"
+    password: "root"
+    driverClass: "com.mysql.jdbc.Driver"
+    url: "jdbc:mysql://localhost:3306"
