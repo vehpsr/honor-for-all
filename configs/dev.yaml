@@ -9,4 +9,4 @@ database:
     user: "admin"
     password: "root"
     driverClass: "com.mysql.jdbc.Driver"
-    url: "jdbc:mysql://localhost:3306"
+    url: "jdbc:mysql://localhost:3306/honor"
