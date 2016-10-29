@@ -1,0 +1,7 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Stat",
+    "description": "Define schema for hero stat/ability",
+    "type": "string",
+    "enum": ["HP", "damage", "spell", "evade", "block", "armor", "resistance", "spell_power", "attack_power"]
+}
