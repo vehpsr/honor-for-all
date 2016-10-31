@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Heroes Vm",
+    "description": "List of Heroes",
+    "type": "object",
+    "properties": {
+        "heroes": {
+            "description": "List of heroes",
+            "type": "array",
+            "items": {
+                "$ref": "hero-vm.json"
+            },
+            "uniqueItems": true
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Hero Db",
+    "description": "Schema for defining Hero DB schema",
+    "type": "object",
+    "extends": {
+        "$ref": "../base/hero.json"
+    },
+    "properties": {
+        "statDetails": {
+            "description": "JSON string that keep hero stats",
+            "type": "string"
+        }
+    }
+}

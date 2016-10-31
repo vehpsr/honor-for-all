@@ -100,13 +100,12 @@
                     <includeJsr303Annotations>true</includeJsr303Annotations>
                     <useLongIntegers>true</useLongIntegers>
                     <generateBuilders>true</generateBuilders>
+                    <useCommonsLang3>true</useCommonsLang3>
                     <sourcePaths>
                         <sourcePath>${basedir}/src/main/resources/schema</sourcePath>
                         <sourcePath>${basedir}/src/main/resources/schema/base</sourcePath>
-                        <!--
-                        <sourcePath>${basedir}/src/main/resources/schema/vm</sourcePath>
                         <sourcePath>${basedir}/src/main/resources/schema/db</sourcePath>
-                         -->
+                        <sourcePath>${basedir}/src/main/resources/schema/vm</sourcePath>
                     </sourcePaths>
                     <outputDirectory>${basedir}/target/generated-sources</outputDirectory>
                     <targetPackage>com.honor.forall.model</targetPackage>

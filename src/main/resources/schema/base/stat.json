@@ -3,5 +3,19 @@
     "title": "Stat",
     "description": "Define schema for hero stat/ability",
     "type": "string",
-    "enum": ["HP", "damage", "spell", "evade", "block", "armor", "resistance", "spell_power", "attack_power"]
+    "enum": [
+        "HP",
+        "HP_regen",
+        "MP",
+        "MP_regen",
+        "damage",
+        "crit_chance",
+        "crit_damage",
+        "evade",
+        "block",
+        "armor",
+        "resistance",
+        "spell_power",
+        "attack_power"
+    ]
 }

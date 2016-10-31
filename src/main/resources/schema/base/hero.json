@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Hero",
+    "description": "Schema for defining base hero class",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "Unique hero id",
+            "type": "integer"
+        },
+        "name": {
+            "description": "Hero name",
+            "type": "string"
+        },
+        "description": {
+            "description": "Hero description",
+            "type": "string"
+        },
+        "imgUri": {
+            "description": "Image URI",
+            "type": "string"
+        },
+        "class": {
+            "description": "Hero class",
+            "type": "string",
+            "enum": [
+                "Warrior",
+                "Assassin",
+                "Support",
+                "Specialist"
+            ]
+        }
+    }
+}

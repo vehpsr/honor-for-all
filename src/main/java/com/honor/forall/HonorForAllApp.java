@@ -1,27 +1,39 @@
 package com.honor.forall;
 
-import org.apache.ibatis.transaction.TransactionFactory;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.apache.ibatis.type.EnumTypeHandler;
+import org.apache.ibatis.type.TypeAliasRegistry;
 
+import com.honor.forall.dao.HeroDao;
+import com.honor.forall.dao.dataaccess.HeroDataAccess;
+import com.honor.forall.dao.impl.HeroDaoImpl;
+import com.honor.forall.dao.mapper.HeroMapper;
 import com.honor.forall.health.DbHealthCheck;
 import com.honor.forall.health.HonorForAllHealthCheck;
+import com.honor.forall.model.vm.HeroVm;
+import com.honor.forall.resources.HeroResource;
 import com.honor.forall.resources.IndexResource;
+import com.honor.forall.service.HeroService;
+import com.honor.forall.service.impl.HeroServiceImpl;
 
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
-import io.dropwizard.assets.AssetsBundle;
-import io.dropwizard.db.ManagedDataSource;
 
 public class HonorForAllApp extends Application<HonorForAllConfiguration> {
 
     private HonorForAllConfiguration config;
     private Environment environment;
     private SqlSessionFactory sessionFactory;
+    private HeroDao heroDao;
+    private HeroService heroService;
 
     public static void main(final String[] args) throws Exception {
         String[] mainArgs;
@@ -52,6 +64,8 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         this.environment = environment;
 
         setUpDataBase();
+        setUpDao();
+        setUpServices();
         setUpResources();
         setUpHealthChecks();
     }
@@ -64,10 +78,34 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         Configuration mybatisConfiguration = new Configuration(myBatisEnvironment);
         sessionFactory = new SqlSessionFactoryBuilder().build(mybatisConfiguration);
         environment.lifecycle().manage(dataSource);
+
+        registerAliases();
+        registerMappers();
+    }
+
+    private void registerAliases() {
+        TypeAliasRegistry registry = sessionFactory.getConfiguration().getTypeAliasRegistry();
+        registry.registerAlias(EnumTypeHandler.class);
+        registry.registerAlias(HeroDataAccess.class);
+        registry.registerAlias(HeroVm.class);
+    }
+
+    private void registerMappers() {
+        Configuration c = sessionFactory.getConfiguration();
+        c.addMapper(HeroMapper.class);
+    }
+
+    private void setUpDao() {
+        heroDao = new HeroDaoImpl(sessionFactory);
+    }
+
+    private void setUpServices() {
+        heroService = new HeroServiceImpl(heroDao);
     }
 
     private void setUpResources() {
         environment.jersey().register(new IndexResource());
+        environment.jersey().register(new HeroResource(heroService));
     }
 
     private void setUpHealthChecks() {

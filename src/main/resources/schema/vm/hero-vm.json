@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Hero Db",
+    "description": "Schema for defining Hero DB schema",
+    "type": "object",
+    "extends": {
+        "$ref": "../base/hero.json"
+    },
+    "properties": {
+        "stats": {
+            "description": "Hero stats",
+            "type": "com.honor.forall.model.base.Stats"
+        },
+        "spells": {
+            "description": "Hero spells",
+            "type": "array",
+            "items": {
+                "$ref": "../base/spell.json"
+            },
+            "uniqueItems": true
+        }
+    }
+}

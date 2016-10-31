@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Spell",
+    "description": "Schema for defining hero spell",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "Unique spell id",
+            "type": "integer"
+        },
+        "name": {
+            "description": "Spell name",
+            "type": "string"
+        },
+        "description": {
+            "description": "Spell description",
+            "type": "string"
+        },
+        "imgUri": {
+            "description": "Image URI",
+            "type": "string"
+        }
+    }
+}

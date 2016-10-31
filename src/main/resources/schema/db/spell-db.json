@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Spell Db",
+    "description": "Schema for defining hero Spell DB schema",
+    "type": "object",
+    "extends": {
+        "$ref": "../base/spell.json"
+    },
+    "properties": {
+        "heroId": {
+            "description": "Hero id",
+            "type": "integer"
+        }
+    }
+}
