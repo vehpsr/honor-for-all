@@ -36,7 +36,9 @@ baseUri: https://localhos:8080/honor/api/{version}
         body:
           application/json:
             example: |
-              {"message": "Invalid input parameter [abc]. Expected numeric value."}
+              {
+                "message": "Invalid input parameter [abc]. Expected numeric value."
+              }
 
   /{heroId}:
     description: Get Hero by id

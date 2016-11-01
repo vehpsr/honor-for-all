@@ -15,7 +15,7 @@ Your application should be up and ready at [localhost:8080](http://localhost:808
 Check that all services are successfully connected with [healthCheck](http://localhost:8081/healthcheck)
 
 ## API
-Check ![RAML](src/main/resources/raml/api.raml) for latest version of supported endpoints.
+Check ![RAML](src/main/resources/api/api.raml) for latest version of supported endpoints.
 
 ## Environment
 * Build tool [Maven](https://maven.apache.org/download.cgi)
