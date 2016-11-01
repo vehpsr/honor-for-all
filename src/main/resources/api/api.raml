@@ -1,0 +1,57 @@
+#%RAML 0.8
+title: honor-for-all
+version: v1
+mediaType: application/json
+protocols: [ HTTP, HTTPS ]
+baseUri: https://localhos:8080/honor/api/{version}
+
+/hero:
+  description: Get Hero list (with ability to filter by hero id or class and retrieve partial payload).
+  type: bulk-collection
+  get:
+    queryParameters:
+      heroIds:
+        description: Specify comma separated list of Hero ids. If empty -- return all Heroes.
+        type: string
+        required: false
+        default: <empty>
+        example: "1,2,3"
+      classes:
+        description: If specified (one of [warrior, support, specialist, assassin]) will filter result set to include only Heroes of this class. If empty -- return all classes.
+        required: false
+        default: <empty>
+        example: "warrior,support"
+      include:
+        description: List of comma separated Hero fields. Can be one of [hero, spells]. Used to retrieve partial Hero data.
+        required: false
+        default: "hero"
+        exmaple: "hero,spells"
+    responses:
+      200:
+        body:
+          application/json:
+            schema: !include ../schema/vm/heroes-vm.json
+            example: TODO add
+      400:
+        body:
+          application/json:
+            example: |
+              {"message": "Invalid input parameter [abc]. Expected numeric value."}
+
+  /{heroId}:
+    description: Get Hero by id
+    type: item
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: !include ../schema/vm/hero-vm.json
+              example: TODO add
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Fail to find Hero with id: 100500"
+                }
