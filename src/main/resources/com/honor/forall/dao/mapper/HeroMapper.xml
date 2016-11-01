@@ -3,7 +3,7 @@
 
 <mapper namespace="com.honor.forall.dao.mapper.HeroMapper">
 
-    <sql id="selectHeroes">
+    <select id="getHeroes" resultMap="heroResultMap">
         select
             h.id, h.name, h.description, h.stat_details, h.imgUri,
             upper(hc.name) as class_name
@@ -11,22 +11,57 @@
             hero h
         join hero_class hc
             on h.class_id = hc.id
-    </sql>
-
-    <select id="getHeroes" resultMap="heroDataAccessResultMap">
-        <include refid="selectHeroes" />
+        <if test="ids.size() > 0 || classes.size() > 0">
+        where
+            1 = 1
+            <include refid="filterByHeroIdAndClasses" />
+        </if>
     </select>
 
-    <resultMap id="heroDataAccessResultMap" type="HeroDataAccess">
-        <id property="id" column="id" />
-        <result property="statDetails" column="stat_details"/>
-        <association property="hero" resultMap="heroResultMap" />
-    </resultMap>
+    <select id="getSpells" resultMap="spellResultMap">
+        select
+            s.id, s.hero_id, s.name, s.description, s.imgUri
+        from
+            spell s
+        <if test="ids.size() > 0 || classes.size() > 0">
+        join hero h
+            on s.hero_id = h.id
+        join hero_class hc
+            on h.class_id = hc.id
+        where
+            1 = 1
+            <include refid="filterByHeroIdAndClasses" />
+        </if>
+    </select>
+
+    <sql id="filterByHeroIdAndClasses">
+        <if test="ids.size() > 0">
+            and h.id in
+            <foreach item="h_id" collection="ids" open="(" separator="," close=")">
+                #{h_id}
+            </foreach>
+        </if>
+        <if test="classes.size() > 0">
+            and hc.name in
+            <foreach item="hc_name" collection="classes" open="(" separator="," close=")">
+                #{hc_name, typeHandler=EnumTypeHandler}
+            </foreach>
+        </if>
+    </sql>
 
     <resultMap id="heroResultMap" type="HeroVm">
         <id property="id" column="id" />
         <result property="_class" column="class_name" typeHandler="EnumTypeHandler" />
+        <result property="stats" column="stat_details" typeHandler="HeroStatsTypeHandler" />
         <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="imgUri" column="imgUri" />
+    </resultMap>
+
+    <resultMap id="spellResultMap" type="SpellDb">
+        <id property="id" column="sid" />
+        <result property="heroId" column="hero_id" />
+        <result property="name" column="sname" />
         <result property="description" column="description" />
         <result property="imgUri" column="imgUri" />
     </resultMap>

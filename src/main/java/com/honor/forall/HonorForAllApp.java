@@ -5,15 +5,17 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.apache.ibatis.type.EnumTypeHandler;
 import org.apache.ibatis.type.TypeAliasRegistry;
 
 import com.honor.forall.dao.HeroDao;
-import com.honor.forall.dao.dataaccess.HeroDataAccess;
 import com.honor.forall.dao.impl.HeroDaoImpl;
 import com.honor.forall.dao.mapper.HeroMapper;
+import com.honor.forall.dao.typehandler.EnumTypeHandler;
+import com.honor.forall.dao.typehandler.HeroStatsTypeHandler;
+import com.honor.forall.exception.mapper.UnhandledExceptionMapper;
 import com.honor.forall.health.DbHealthCheck;
 import com.honor.forall.health.HonorForAllHealthCheck;
+import com.honor.forall.model.db.SpellDb;
 import com.honor.forall.model.vm.HeroVm;
 import com.honor.forall.resources.HeroResource;
 import com.honor.forall.resources.IndexResource;
@@ -68,6 +70,7 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         setUpServices();
         setUpResources();
         setUpHealthChecks();
+        setupExceptionHandling();
     }
 
     private void setUpDataBase() {
@@ -86,8 +89,9 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
     private void registerAliases() {
         TypeAliasRegistry registry = sessionFactory.getConfiguration().getTypeAliasRegistry();
         registry.registerAlias(EnumTypeHandler.class);
-        registry.registerAlias(HeroDataAccess.class);
+        registry.registerAlias(HeroStatsTypeHandler.class);
         registry.registerAlias(HeroVm.class);
+        registry.registerAlias(SpellDb.class);
     }
 
     private void registerMappers() {
@@ -111,6 +115,10 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
     private void setUpHealthChecks() {
         environment.healthChecks().register("mysql-db", new DbHealthCheck(sessionFactory));
         environment.healthChecks().register(getName(), new HonorForAllHealthCheck());
+    }
+
+    private void setupExceptionHandling() {
+        environment.jersey().register(new UnhandledExceptionMapper());
     }
 
 }
