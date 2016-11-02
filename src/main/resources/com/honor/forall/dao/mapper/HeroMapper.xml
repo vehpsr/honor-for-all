@@ -20,7 +20,7 @@
 
     <select id="getSpells" resultMap="spellResultMap">
         select
-            s.id, s.hero_id, s.name, s.description, s.imgUri
+            s.id, s.hero_id, s.name, s.description, s.pos, s.imgUri
         from
             spell s
         <if test="ids.size() > 0 || classes.size() > 0">
@@ -32,6 +32,8 @@
             1 = 1
             <include refid="filterByHeroIdAndClasses" />
         </if>
+        order by
+            s.pos, s.name
     </select>
 
     <sql id="filterByHeroIdAndClasses">
@@ -63,6 +65,7 @@
         <result property="heroId" column="hero_id" />
         <result property="name" column="sname" />
         <result property="description" column="description" />
+        <result property="order" column="pos" />
         <result property="imgUri" column="imgUri" />
     </resultMap>
 

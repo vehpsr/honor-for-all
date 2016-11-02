@@ -16,6 +16,10 @@
             "description": "Spell description",
             "type": "string"
         },
+        "order": {
+            "description": "Spell sort order",
+            "type": "integer"
+        },
         "imgUri": {
             "description": "Image URI",
             "type": "string"
