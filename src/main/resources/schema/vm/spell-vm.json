@@ -7,9 +7,9 @@
         "$ref": "../base/spell.json"
     },
     "properties": {
-        "stats": {
-            "description": "Array of SpellStat items",
-            "javaType": "com.honor.forall.model.base.SpellStats"
+        "statDetails": {
+            "description": "Spell stat details",
+            "$ref": "../base/spell-stat-detail.json"
         }
     }
 }

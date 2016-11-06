@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Spell Stat Detail",
+    "description": "Schema for defining hero spell stat wrapper",
+    "type": "object",
+    "properties": {
+        "cooldown": {
+            "description": "Cooldown in Rounds. Default '0' -- instant",
+            "type": "integer",
+            "default": "0"
+        },
+        "manacost": {
+            "description": "Spell MP cost",
+            "type": "number",
+            "default": "0"
+        },
+        "stats": {
+            "description": "Array of SpellStat items",
+            "type": "array",
+            "items": {
+                "javaType": "com.honor.forall.model.base.SpellStat"
+            },
+            "uniqueItems": true
+        }
+    }
+}

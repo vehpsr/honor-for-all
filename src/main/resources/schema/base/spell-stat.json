@@ -22,11 +22,6 @@
             "description": "Hero stat that will be affected",
             "javaType": "com.honor.forall.model.base.HeroStat"
         },
-        "cooldown": {
-            "description": "Cooldown in Rounds. Default '0' -- instant",
-            "type": "integer",
-            "default": "0"
-        },
         "target": {
             "description": "Spell can be applied to",
             "type": "string",

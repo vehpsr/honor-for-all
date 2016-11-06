@@ -62,7 +62,7 @@
 
     <resultMap id="spellResultMap" type="SpellVm">
         <id property="id" column="sid" />
-        <result property="stats" column="stat_details" typeHandler="SpellStatsTypeHandler" />
+        <result property="statDetails" column="stat_details" typeHandler="SpellStatDetailTypeHandler" />
         <result property="heroId" column="hero_id" />
         <result property="name" column="sname" />
         <result property="description" column="description" />
