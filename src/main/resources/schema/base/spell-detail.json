@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-03/schema#",
-    "title": "Spell Stat Detail",
-    "description": "Schema for defining hero spell stat wrapper",
+    "title": "Spell Detail",
+    "description": "Schema for defining hero spell traits wrapper",
     "type": "object",
     "properties": {
         "cooldown": {
@@ -14,11 +14,11 @@
             "type": "number",
             "default": "0"
         },
-        "stats": {
+        "traits": {
             "description": "Array of SpellStat items",
             "type": "array",
             "items": {
-                "javaType": "com.honor.forall.model.base.SpellStat"
+                "javaType": "com.honor.forall.model.base.SpellTrait"
             },
             "uniqueItems": true
         }

@@ -7,9 +7,9 @@
         "$ref": "../base/spell.json"
     },
     "properties": {
-        "statDetails": {
+        "details": {
             "description": "Spell stat details",
-            "$ref": "../base/spell-stat-detail.json"
+            "$ref": "../base/spell-detail.json"
         }
     }
 }

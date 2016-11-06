@@ -9,35 +9,35 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.honor.forall.model.base.HeroStat;
-import com.honor.forall.model.base.SpellStat;
-import com.honor.forall.model.base.SpellStat.Target;
-import com.honor.forall.model.base.SpellStatDetail;
+import com.honor.forall.model.base.SpellTrait;
+import com.honor.forall.model.base.SpellTrait.Target;
+import com.honor.forall.model.base.SpellDetail;
 import com.honor.forall.util.SerializationUtils;
 
 public class SpellDbTest {
 
     @Test
     public void testStatDetailLimit() {
-        SpellStatDetail statDetail = new SpellStatDetail();
+        SpellDetail spellDetail = new SpellDetail();
 
-        Set<SpellStat> stats = new LinkedHashSet<>();
-        SpellStat stat = new SpellStat();
-        stat.setTarget(Target.ENEMY);
-        stat.setHeroStat(HeroStat.HP);
-        stat.setHitValue(-150.0);
-        stats.add(stat);
+        Set<SpellTrait> traits = new LinkedHashSet<>();
+        SpellTrait trait = new SpellTrait();
+        trait.setTarget(Target.ENEMY);
+        trait.setHeroStat(HeroStat.HP);
+        trait.setHitValue(-150.0);
+        traits.add(trait);
 
-        stat = new SpellStat();
-        stat.setTarget(Target.ALLY);
-        stat.setHeroStat(HeroStat.HP);
-        stat.setHitValue(150.0);
-        stats.add(stat);
+        trait = new SpellTrait();
+        trait.setTarget(Target.ALLY);
+        trait.setHeroStat(HeroStat.HP);
+        trait.setHitValue(150.0);
+        traits.add(trait);
 
-        statDetail.setCooldown(10L);
-        statDetail.setManacost(1000.0);
-        statDetail.setStats(stats);
+        spellDetail.setCooldown(10L);
+        spellDetail.setManacost(1000.0);
+        spellDetail.setTraits(traits);
 
-        String statDetails = SerializationUtils.toJson(statDetail);
+        String statDetails = SerializationUtils.toJson(spellDetail);
         assertThat(statDetails.length(), lessThan(512));
     }
 }
