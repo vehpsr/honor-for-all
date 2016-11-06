@@ -1,0 +1,42 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Spell Stat",
+    "description": "Schema for defining hero spell stat class properties",
+    "type": "object",
+    "properties": {
+        "hitValue": {
+            "description": "Amount of spell initial impact (heal/damage)",
+            "type": "number"
+        },
+        "hitValueOverTime": {
+            "description": "Amount of spell impact over time. Default '0' -- instant",
+            "type": "number",
+            "default": "0"
+        },
+        "duration": {
+            "description": "Amount of Rounds/Hits that spell will be active. Default '0' -- instant",
+            "type": "integer",
+            "default": "0"
+        },
+        "heroStat": {
+            "description": "Hero stat that will be affected",
+            "javaType": "com.honor.forall.model.base.HeroStat"
+        },
+        "cooldown": {
+            "description": "Cooldown in Rounds. Default '0' -- instant",
+            "type": "integer",
+            "default": "0"
+        },
+        "target": {
+            "description": "Spell can be applied to",
+            "type": "string",
+            "enum": [
+                "Self",
+                "Ally",
+                "Enemy",
+                "AllyGroup",
+                "EnemyGroup"
+            ]
+        }
+    }
+}

@@ -1,6 +1,6 @@
 package com.honor.forall.dao.dataaccess;
 
-import com.honor.forall.model.base.Stats;
+import com.honor.forall.model.base.HeroStats;
 import com.honor.forall.model.vm.HeroVm;
 import com.honor.forall.util.SerializationUtils;
 
@@ -12,7 +12,7 @@ public class HeroDataAccess implements DataAccess<HeroVm> {
 
     @Override
     public HeroVm convert() { // TODO custom type-handler?
-        Stats stats = SerializationUtils.fromJson(statDetails, Stats.class);
+        HeroStats stats = SerializationUtils.fromJson(statDetails, HeroStats.class);
         hero.setStats(stats);
         hero.setSpells(null);
         return hero;

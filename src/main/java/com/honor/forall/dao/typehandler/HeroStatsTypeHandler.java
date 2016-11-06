@@ -4,18 +4,27 @@ import java.util.function.Function;
 
 import org.apache.ibatis.type.MappedTypes;
 
-import com.honor.forall.model.base.Stats;
+import com.honor.forall.model.base.HeroStat;
+import com.honor.forall.model.base.HeroStats;
 import com.honor.forall.util.SerializationUtils;
 
-@MappedTypes(Stats.class)
-public class HeroStatsTypeHandler extends AbstractTypeHandler<Stats> {
+@MappedTypes(HeroStats.class)
+public class HeroStatsTypeHandler extends AbstractTypeHandler<HeroStats> {
 
     public HeroStatsTypeHandler() {
         super(format(), null);
     }
 
-    private static Function<String, Stats> format() {
-        return json -> SerializationUtils.fromJson(json, Stats.class);
+    private static Function<String, HeroStats> format() {
+        return json -> {
+            HeroStats stats = SerializationUtils.fromJson(json, HeroStats.class);
+            for (HeroStat stat : HeroStat.BASE_STATS) {
+                if (!stats.containsKey(stat)) {
+                    stats.add(stat);
+                }
+            }
+            return stats;
+        };
     }
 
 }

@@ -12,11 +12,12 @@ import com.honor.forall.dao.impl.HeroDaoImpl;
 import com.honor.forall.dao.mapper.HeroMapper;
 import com.honor.forall.dao.typehandler.EnumTypeHandler;
 import com.honor.forall.dao.typehandler.HeroStatsTypeHandler;
+import com.honor.forall.dao.typehandler.SpellStatsTypeHandler;
 import com.honor.forall.exception.mapper.UnhandledExceptionMapper;
 import com.honor.forall.health.DbHealthCheck;
 import com.honor.forall.health.HonorForAllHealthCheck;
-import com.honor.forall.model.db.SpellDb;
 import com.honor.forall.model.vm.HeroVm;
+import com.honor.forall.model.vm.SpellVm;
 import com.honor.forall.resources.HeroResource;
 import com.honor.forall.resources.IndexResource;
 import com.honor.forall.service.HeroService;
@@ -90,8 +91,9 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         TypeAliasRegistry registry = sessionFactory.getConfiguration().getTypeAliasRegistry();
         registry.registerAlias(EnumTypeHandler.class);
         registry.registerAlias(HeroStatsTypeHandler.class);
+        registry.registerAlias(SpellStatsTypeHandler.class);
         registry.registerAlias(HeroVm.class);
-        registry.registerAlias(SpellDb.class);
+        registry.registerAlias(SpellVm.class);
     }
 
     private void registerMappers() {

@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Spell Vm",
+    "description": "Schema for defining hero Spell view model",
+    "type": "object",
+    "extends": {
+        "$ref": "../base/spell.json"
+    },
+    "properties": {
+        "stats": {
+            "description": "Array of SpellStat items",
+            "javaType": "com.honor.forall.model.base.SpellStats"
+        }
+    }
+}

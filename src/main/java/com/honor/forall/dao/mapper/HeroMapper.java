@@ -5,8 +5,8 @@ import java.util.Set;
 import org.apache.ibatis.annotations.Param;
 
 import com.honor.forall.model.base.Hero;
-import com.honor.forall.model.db.SpellDb;
 import com.honor.forall.model.vm.HeroVm;
+import com.honor.forall.model.vm.SpellVm;
 
 public interface HeroMapper {
 
@@ -15,7 +15,7 @@ public interface HeroMapper {
             @Param("classes") Set<Hero.Class> heroClasses
         );
 
-    Set<SpellDb> getSpells(
+    Set<SpellVm> getSpells(
             @Param("ids") Set<Integer> heroIds,
             @Param("classes") Set<Hero.Class> heroClasses
         );

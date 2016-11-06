@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-03/schema#",
-    "title": "Hero Db",
-    "description": "Schema for defining Hero DB schema",
+    "title": "Hero Vm",
+    "description": "Schema for defining Hero view model",
     "type": "object",
     "extends": {
         "$ref": "../base/hero.json"
@@ -15,7 +15,7 @@
             "description": "Hero spells",
             "type": "array",
             "items": {
-                "$ref": "../base/spell.json"
+                "javaType": "com.honor.forall.model.vm.SpellVm"
             },
             "uniqueItems": true
         }

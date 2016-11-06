@@ -20,7 +20,7 @@
 
     <select id="getSpells" resultMap="spellResultMap">
         select
-            s.id, s.hero_id, s.name, s.description, s.pos, s.imgUri
+            s.id, s.hero_id, s.name, s.description, s.pos, s.imgUri, s.stat_details
         from
             spell s
         <if test="ids.size() > 0 || classes.size() > 0">
@@ -60,8 +60,9 @@
         <result property="imgUri" column="imgUri" />
     </resultMap>
 
-    <resultMap id="spellResultMap" type="SpellDb">
+    <resultMap id="spellResultMap" type="SpellVm">
         <id property="id" column="sid" />
+        <result property="stats" column="stat_details" typeHandler="SpellStatsTypeHandler" />
         <result property="heroId" column="hero_id" />
         <result property="name" column="sname" />
         <result property="description" column="description" />

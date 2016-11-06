@@ -7,9 +7,9 @@
         "$ref": "../base/spell.json"
     },
     "properties": {
-        "heroId": {
-            "description": "Hero id",
-            "type": "integer"
+        "statDetails": {
+            "description": "JSON serialized SpellStats data",
+            "type": "string"
         }
     }
 }

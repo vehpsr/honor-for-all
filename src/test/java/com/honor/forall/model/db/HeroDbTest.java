@@ -5,16 +5,16 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import com.honor.forall.model.base.Stat;
-import com.honor.forall.model.base.Stats;
+import com.honor.forall.model.base.HeroStat;
+import com.honor.forall.model.base.HeroStats;
 import com.honor.forall.util.SerializationUtils;
 
 public class HeroDbTest {
 
     @Test
     public void testStatDetailsLimit() throws Exception {
-        Stats stats = new Stats();
-        for (Stat stat : Stat.values()) {
+        HeroStats stats = new HeroStats();
+        for (HeroStat stat : HeroStat.BASE_STATS) {
             stats.put(stat, 10000.0);
         }
         String statDetails = SerializationUtils.toJson(stats);

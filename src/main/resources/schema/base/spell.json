@@ -8,6 +8,10 @@
             "description": "Unique spell id",
             "type": "integer"
         },
+        "heroId": {
+            "description": "Hero id",
+            "type": "integer"
+        },
         "name": {
             "description": "Spell name",
             "type": "string"

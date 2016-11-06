@@ -16,8 +16,8 @@ import com.honor.forall.dao.HeroDao;
 import com.honor.forall.dao.mapper.HeroMapper;
 import com.honor.forall.enums.HeroField;
 import com.honor.forall.model.base.Hero;
-import com.honor.forall.model.db.SpellDb;
 import com.honor.forall.model.vm.HeroVm;
+import com.honor.forall.model.vm.SpellVm;
 import com.honor.forall.util.ParallelExecutionUtils;
 
 public class HeroDaoImpl implements HeroDao {
@@ -43,16 +43,16 @@ public class HeroDaoImpl implements HeroDao {
                 heroSupplier = () -> Collections.emptySet();
             }
 
-            Supplier<Set<SpellDb>> spellSupplier;
+            Supplier<Set<SpellVm>> spellSupplier;
             if (heroFields.contains(HeroField.SPELLS)) {
                 spellSupplier = () -> mapper.getSpells(heroIds, heroClasses);
             } else {
                 spellSupplier = () -> Collections.emptySet();
             }
 
-            BiFunction<Set<HeroVm>, Set<SpellDb>, Set<HeroVm>> merge = (heroes, spells) -> {
+            BiFunction<Set<HeroVm>, Set<SpellVm>, Set<HeroVm>> merge = (heroes, spells) -> {
                 Map<Long, HeroVm> heroById = heroes.stream().collect(Collectors.toMap(h -> h.getId(), h -> h));
-                Map<Long, List<SpellDb>> spellsByHeroId = spells.stream().collect(Collectors.groupingBy(s -> s.getHeroId()));
+                Map<Long, List<SpellVm>> spellsByHeroId = spells.stream().collect(Collectors.groupingBy(s -> s.getHeroId()));
 
                 Set<Long> ids = new LinkedHashSet<>();
                 ids.addAll(heroById.keySet());
@@ -61,7 +61,7 @@ public class HeroDaoImpl implements HeroDao {
                 Set<HeroVm> result = new LinkedHashSet<>();
                 for (Long id : ids) {
                     HeroVm hero = heroById.getOrDefault(id, new HeroVm().withId(id));
-                    List<SpellDb> heroSpells = spellsByHeroId.get(id);
+                    List<SpellVm> heroSpells = spellsByHeroId.get(id);
                     hero.setSpells(heroSpells == null ? null : new LinkedHashSet<>(heroSpells));
                     result.add(hero);
                 }
