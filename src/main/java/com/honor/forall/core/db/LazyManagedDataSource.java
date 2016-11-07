@@ -1,4 +1,4 @@
-package com.honor.forall.db;
+package com.honor.forall.core.db;
 
 import java.sql.SQLException;
 

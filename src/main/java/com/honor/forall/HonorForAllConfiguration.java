@@ -3,7 +3,7 @@ package com.honor.forall;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.honor.forall.db.LazyDataSourceFactory;
+import com.honor.forall.core.db.LazyDataSourceFactory;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;

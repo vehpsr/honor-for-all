@@ -1,4 +1,4 @@
-package com.honor.forall.db;
+package com.honor.forall.core.db;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;

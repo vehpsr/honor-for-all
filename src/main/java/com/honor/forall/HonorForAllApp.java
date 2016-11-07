@@ -1,11 +1,14 @@
 package com.honor.forall;
 
+import java.util.logging.Logger;
+
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.type.TypeAliasRegistry;
+import org.glassfish.jersey.filter.LoggingFilter;
 
 import com.honor.forall.dao.HeroDao;
 import com.honor.forall.dao.impl.HeroDaoImpl;
@@ -71,7 +74,8 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         setUpServices();
         setUpResources();
         setUpHealthChecks();
-        setupExceptionHandling();
+        setUpExceptionHandling();
+        setUpAuditLogging();
     }
 
     private void setUpDataBase() {
@@ -119,8 +123,13 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         environment.healthChecks().register(getName(), new HonorForAllHealthCheck());
     }
 
-    private void setupExceptionHandling() {
+    private void setUpExceptionHandling() {
         environment.jersey().register(new UnhandledExceptionMapper());
+    }
+
+    private void setUpAuditLogging() {
+        environment.jersey().register(new LoggingFilter(Logger.getLogger("OutboundRequestResponse"), true));
+        environment.jersey().register(new LoggingFilter(Logger.getLogger("InboundRequestResponse"), true));
     }
 
 }

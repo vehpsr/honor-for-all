@@ -1,3 +1,8 @@
+server:
+    requestLog:
+        appenders:
+          - type: console
+            threshold: WARN
 
 # DB
 database:
