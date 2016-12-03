@@ -5,6 +5,42 @@ mediaType: application/json
 protocols: [ HTTP, HTTPS ]
 baseUri: https://localhos:8080/honor/api/{version}
 
+/login
+  description: User authentication endpoint
+  type: item
+  post:
+    queryParameters:
+      login:
+        description: User login
+        type: string
+        required: false
+        example: "user_login_name"
+      password:
+        description: User password
+        type: string
+        required: false
+        example: "user_strong_password"
+    responses:
+      201:
+        body:
+          application/json:
+            schema: !include ../schema/vm/auth-token-vm.json
+            example: TODO add
+      400:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Login is not yet supported. Guest users only."
+              }
+      401:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Authorization failed: invalid login or password"
+              }
+
 /hero:
   description: Get Hero list (with ability to filter by hero id or class and retrieve partial payload).
   type: bulk-collection

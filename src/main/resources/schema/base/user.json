@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "User",
+    "description": "Schema for defining user",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "User id",
+            "type": "integer"
+        },
+        "login": {
+            "description": "User login",
+            "type": "string"
+        },
+        "code": {
+            "description": "User code",
+            "type": "integer"
+        }
+    }
+}

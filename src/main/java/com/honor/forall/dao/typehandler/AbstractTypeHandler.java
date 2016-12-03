@@ -12,7 +12,7 @@ import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.JdbcType;
 
-@MappedJdbcTypes(JdbcType.NVARCHAR)
+@MappedJdbcTypes(JdbcType.VARCHAR)
 public abstract class AbstractTypeHandler<T> extends BaseTypeHandler<T> {
 
     private final Function<String, T> format;
@@ -44,7 +44,7 @@ public abstract class AbstractTypeHandler<T> extends BaseTypeHandler<T> {
     @Override
     public void setNonNullParameter(PreparedStatement ps, int columnIndex, T type, JdbcType jdbcType) throws SQLException {
         String defaultValue = nullValue == null ? null : nullValue.toString();
-        ps.setObject(columnIndex, Objects.toString(type, defaultValue), Types.NVARCHAR);
+        ps.setObject(columnIndex, Objects.toString(type, defaultValue), Types.VARCHAR);
     }
 
     private T format(String value) {

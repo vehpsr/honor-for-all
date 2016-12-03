@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Authorization Token",
+    "description": "Schema for defining security authentication data",
+    "type": "object",
+    "properties": {
+        "token": {
+            "description": "Authorization token",
+            "type": "string",
+            "format": "uuid"
+        },
+        "type": {
+            "description": "Authourization token type",
+            "type": "string",
+            "enum": [
+                "bearer"
+            ]
+        }
+    }
+}

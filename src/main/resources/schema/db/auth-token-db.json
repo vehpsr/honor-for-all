@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Authorization Token",
+    "description": "Schema for defining security authentication data",
+    "type": "object",
+    "extends": {
+        "$ref": "../base/auth-token.json"
+    },
+    "properties": {
+        "userId": {
+            "description": "User reference",
+            "type": "integer"
+        },
+        "updated": {
+            "description": "Last access date",
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}

@@ -1,5 +1,7 @@
 package com.honor.forall;
 
+import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.apache.ibatis.session.Configuration;
@@ -8,23 +10,34 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.type.TypeAliasRegistry;
+import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.glassfish.jersey.filter.LoggingFilter;
 
 import com.honor.forall.dao.HeroDao;
 import com.honor.forall.dao.impl.HeroDaoImpl;
+import com.honor.forall.dao.impl.LoginDaoImpl;
+import com.honor.forall.dao.impl.UserDaoImpl;
 import com.honor.forall.dao.mapper.HeroMapper;
+import com.honor.forall.dao.mapper.LoginMapper;
+import com.honor.forall.dao.mapper.UserMapper;
+import com.honor.forall.dao.typehandler.DateToLongTypeHandler;
 import com.honor.forall.dao.typehandler.EnumTypeHandler;
 import com.honor.forall.dao.typehandler.HeroStatsTypeHandler;
 import com.honor.forall.dao.typehandler.SpellDetailTypeHandler;
+import com.honor.forall.dao.typehandler.UuidTypeHandler;
 import com.honor.forall.exception.mapper.UnhandledExceptionMapper;
 import com.honor.forall.health.DbHealthCheck;
 import com.honor.forall.health.HonorForAllHealthCheck;
+import com.honor.forall.model.base.User;
+import com.honor.forall.model.db.AuthTokenDb;
 import com.honor.forall.model.vm.HeroVm;
 import com.honor.forall.model.vm.SpellVm;
 import com.honor.forall.resources.HeroResource;
 import com.honor.forall.resources.IndexResource;
+import com.honor.forall.resources.LoginResource;
 import com.honor.forall.service.HeroService;
 import com.honor.forall.service.impl.HeroServiceImpl;
+import com.honor.forall.service.impl.LoginServiceImpl;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -37,9 +50,16 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
 
     private HonorForAllConfiguration config;
     private Environment environment;
+
+    // dao
     private SqlSessionFactory sessionFactory;
     private HeroDao heroDao;
+    private UserDaoImpl userDao;
+    private LoginDaoImpl loginDao;
+
+    // services
     private HeroService heroService;
+    private LoginServiceImpl loginService;
 
     public static void main(final String[] args) throws Exception {
         String[] mainArgs;
@@ -88,34 +108,51 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         environment.lifecycle().manage(dataSource);
 
         registerAliases();
+        registerTypeHandlers();
         registerMappers();
     }
 
     private void registerAliases() {
         TypeAliasRegistry registry = sessionFactory.getConfiguration().getTypeAliasRegistry();
         registry.registerAlias(EnumTypeHandler.class);
+        registry.registerAlias(UuidTypeHandler.class);
+        registry.registerAlias(DateToLongTypeHandler.class);
         registry.registerAlias(HeroStatsTypeHandler.class);
         registry.registerAlias(SpellDetailTypeHandler.class);
         registry.registerAlias(HeroVm.class);
         registry.registerAlias(SpellVm.class);
+        registry.registerAlias(AuthTokenDb.class);
+        registry.registerAlias(User.class);
+    }
+
+    private void registerTypeHandlers() {
+        TypeHandlerRegistry registry = sessionFactory.getConfiguration().getTypeHandlerRegistry();
+        registry.register(UUID.class, UuidTypeHandler.class);
+        registry.register(Date.class, DateToLongTypeHandler.class);
     }
 
     private void registerMappers() {
         Configuration c = sessionFactory.getConfiguration();
         c.addMapper(HeroMapper.class);
+        c.addMapper(UserMapper.class);
+        c.addMapper(LoginMapper.class);
     }
 
     private void setUpDao() {
         heroDao = new HeroDaoImpl(sessionFactory);
+        userDao = new UserDaoImpl(sessionFactory);
+        loginDao = new LoginDaoImpl(sessionFactory, userDao);
     }
 
     private void setUpServices() {
         heroService = new HeroServiceImpl(heroDao);
+        loginService = new LoginServiceImpl(loginDao);
     }
 
     private void setUpResources() {
         environment.jersey().register(new IndexResource());
         environment.jersey().register(new HeroResource(heroService));
+        environment.jersey().register(new LoginResource(loginService));
     }
 
     private void setUpHealthChecks() {

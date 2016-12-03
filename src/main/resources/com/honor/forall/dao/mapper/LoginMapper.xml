@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.honor.forall.dao.mapper.LoginMapper">
+
+    <insert id="addToken">
+        insert into auth_token (id, type_id, user_id, updated_date)
+            select
+                #{token.token, typeHandler=UuidTypeHandler},
+                id as type_id,
+                #{token.userId},
+                #{token.updated, typeHandler=DateToLongTypeHandler}
+            from
+                auth_token_type
+            where
+                name = #{token.type, typeHandler=EnumTypeHandler}
+    </insert>
+
+</mapper>
