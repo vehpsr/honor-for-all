@@ -21,16 +21,16 @@ import org.eclipse.jetty.http.HttpStatus;
 import com.codahale.metrics.annotation.Timed;
 import com.honor.forall.exception.response.ErrorResponse;
 import com.honor.forall.model.base.AuthToken;
-import com.honor.forall.service.LoginService;
+import com.honor.forall.service.UserService;
 
 @Path(ROOT_URI + LOGIN_RESOURCE_URI)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class LoginResource {
 
-    private final LoginService loginService;
+    private final UserService loginService;
 
-    public LoginResource(LoginService loginService) {
+    public LoginResource(UserService loginService) {
         this.loginService = loginService;
     }
 

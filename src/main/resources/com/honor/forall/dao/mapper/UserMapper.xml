@@ -13,10 +13,37 @@
             and code = 0
     </select>
 
+    <select id="getUserByToken" resultMap="userResultMap">
+        select
+            u.id, u.login, u.code
+        from
+            auth_token t
+        join auth_token_type t_type
+            on t.type_id = t_type.id
+        join users u
+            on t.user_id = u.id
+        where
+            t.id = #{token.token, typeHandler=UuidTypeHandler}
+            and t_type.name = #{token.type, typeHandler=EnumTypeHandler}
+    </select>
+
     <resultMap id="userResultMap" type="User">
         <id property="id" column="id" />
         <result property="login" column="login" />
         <result property="code" column="code" />
     </resultMap>
+
+    <insert id="addToken">
+        insert into auth_token (id, type_id, user_id, updated_date)
+            select
+                #{token.token, typeHandler=UuidTypeHandler},
+                id as type_id,
+                #{token.userId},
+                #{token.updated, typeHandler=DateToLongTypeHandler}
+            from
+                auth_token_type
+            where
+                name = #{token.type, typeHandler=EnumTypeHandler}
+    </insert>
 
 </mapper>

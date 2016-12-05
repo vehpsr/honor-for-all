@@ -1,5 +1,7 @@
 package com.honor.forall.dao.impl;
 
+import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.session.SqlSession;
@@ -9,7 +11,10 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.honor.forall.dao.UserDao;
 import com.honor.forall.dao.mapper.UserMapper;
+import com.honor.forall.exception.HonorAuthenticationException;
+import com.honor.forall.model.base.AuthToken;
 import com.honor.forall.model.base.User;
+import com.honor.forall.model.db.AuthTokenDb;
 
 public class UserDaoImpl implements UserDao {
 
@@ -32,8 +37,36 @@ public class UserDaoImpl implements UserDao {
     public User guestUser() {
         User guest = guestCache.get();
         if (guest == null) {
-            throw new RuntimeException("Authorization required: guest user is not supported"); // TODO treat like 401 HTTP response
+            throw new HonorAuthenticationException("Guest user is not supported");
         }
         return guest;
+    }
+
+    @Override
+    public User getUser(AuthToken authToken) {
+        try (SqlSession session = sessionFactory.openSession(true)) {
+            UserMapper mapper = session.getMapper(UserMapper.class);
+            return mapper.getUserByToken(authToken);
+        }
+    }
+
+    @Override
+    public AuthTokenDb guestAuthToken() {
+        AuthTokenDb token = newAuthToken();
+        try (SqlSession session = sessionFactory.openSession(true)) {
+            UserMapper mapper = session.getMapper(UserMapper.class);
+            User guest = guestUser();
+            token.setUserId(guest.getId());
+            mapper.addToken(token);
+        }
+        return token;
+    }
+
+    private static AuthTokenDb newAuthToken() {
+        AuthTokenDb token = new AuthTokenDb();
+        token.setToken(UUID.randomUUID());
+        token.setType(AuthToken.Type.BEARER);
+        token.setUpdated(new Date());
+        return token;
     }
 }

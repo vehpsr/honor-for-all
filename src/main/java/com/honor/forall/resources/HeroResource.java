@@ -21,12 +21,15 @@ import com.codahale.metrics.annotation.Timed;
 import com.honor.forall.enums.HeroField;
 import com.honor.forall.exception.response.ErrorResponse;
 import com.honor.forall.model.base.Hero.Class;
+import com.honor.forall.model.base.User;
 import com.honor.forall.model.vm.HeroVm;
 import com.honor.forall.model.vm.HeroesVm;
 import com.honor.forall.resources.params.HeroClassParams;
 import com.honor.forall.resources.params.HeroFieldParams;
 import com.honor.forall.resources.params.IntParams;
 import com.honor.forall.service.HeroService;
+
+import io.dropwizard.auth.Auth;
 
 @Path(ROOT_URI + HERO_RESOURCE_URI)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -42,6 +45,7 @@ public class HeroResource {
     @GET
     @Timed
     public Response getHeroes(
+            @Auth User user,
             @QueryParam("heroIds") @DefaultValue("") IntParams heroIdParams,
             @QueryParam("classes") @DefaultValue("") HeroClassParams heroClassParams,
             @QueryParam("include") @DefaultValue("hero") HeroFieldParams heroFieldParams
@@ -57,6 +61,7 @@ public class HeroResource {
     @Path("/{heroId}")
     @Timed
     public Response getHero(
+            @Auth User user,
             @PathParam("heroId") IntParams heroIdParams
             ) {
         int heroId = heroIdParams.single().get();

@@ -12,22 +12,25 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.type.TypeAliasRegistry;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
+import com.honor.forall.core.security.HonorOAuthAuthenticator;
+import com.honor.forall.core.security.HonorAuthorizer;
 import com.honor.forall.dao.HeroDao;
 import com.honor.forall.dao.impl.HeroDaoImpl;
-import com.honor.forall.dao.impl.LoginDaoImpl;
 import com.honor.forall.dao.impl.UserDaoImpl;
 import com.honor.forall.dao.mapper.HeroMapper;
-import com.honor.forall.dao.mapper.LoginMapper;
 import com.honor.forall.dao.mapper.UserMapper;
 import com.honor.forall.dao.typehandler.DateToLongTypeHandler;
 import com.honor.forall.dao.typehandler.EnumTypeHandler;
 import com.honor.forall.dao.typehandler.HeroStatsTypeHandler;
 import com.honor.forall.dao.typehandler.SpellDetailTypeHandler;
 import com.honor.forall.dao.typehandler.UuidTypeHandler;
+import com.honor.forall.exception.mapper.HonorAppExceptionMapper;
 import com.honor.forall.exception.mapper.UnhandledExceptionMapper;
 import com.honor.forall.health.DbHealthCheck;
 import com.honor.forall.health.HonorForAllHealthCheck;
+import com.honor.forall.model.base.AuthToken;
 import com.honor.forall.model.base.User;
 import com.honor.forall.model.db.AuthTokenDb;
 import com.honor.forall.model.vm.HeroVm;
@@ -37,10 +40,13 @@ import com.honor.forall.resources.IndexResource;
 import com.honor.forall.resources.LoginResource;
 import com.honor.forall.service.HeroService;
 import com.honor.forall.service.impl.HeroServiceImpl;
-import com.honor.forall.service.impl.LoginServiceImpl;
+import com.honor.forall.service.impl.UserServiceImpl;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -55,11 +61,10 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
     private SqlSessionFactory sessionFactory;
     private HeroDao heroDao;
     private UserDaoImpl userDao;
-    private LoginDaoImpl loginDao;
 
     // services
     private HeroService heroService;
-    private LoginServiceImpl loginService;
+    private UserServiceImpl userService;
 
     public static void main(final String[] args) throws Exception {
         String[] mainArgs;
@@ -96,6 +101,7 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         setUpHealthChecks();
         setUpExceptionHandling();
         setUpAuditLogging();
+        setupSecurityProvider();
     }
 
     private void setUpDataBase() {
@@ -135,24 +141,33 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
         Configuration c = sessionFactory.getConfiguration();
         c.addMapper(HeroMapper.class);
         c.addMapper(UserMapper.class);
-        c.addMapper(LoginMapper.class);
     }
 
     private void setUpDao() {
         heroDao = new HeroDaoImpl(sessionFactory);
         userDao = new UserDaoImpl(sessionFactory);
-        loginDao = new LoginDaoImpl(sessionFactory, userDao);
     }
 
     private void setUpServices() {
         heroService = new HeroServiceImpl(heroDao);
-        loginService = new LoginServiceImpl(loginDao);
+        userService = new UserServiceImpl(userDao);
     }
 
     private void setUpResources() {
         environment.jersey().register(new IndexResource());
         environment.jersey().register(new HeroResource(heroService));
-        environment.jersey().register(new LoginResource(loginService));
+        environment.jersey().register(new LoginResource(userService));
+    }
+
+    private void setupSecurityProvider() {
+        environment.jersey().register(new AuthDynamicFeature(
+                new OAuthCredentialAuthFilter.Builder<User>()
+                    .setAuthenticator(new HonorOAuthAuthenticator(userService))
+                    .setAuthorizer(new HonorAuthorizer())
+                    .setPrefix(AuthToken.Type.BEARER.toString())
+                    .buildAuthFilter()));
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
     }
 
     private void setUpHealthChecks() {
@@ -162,6 +177,7 @@ public class HonorForAllApp extends Application<HonorForAllConfiguration> {
 
     private void setUpExceptionHandling() {
         environment.jersey().register(new UnhandledExceptionMapper());
+        environment.jersey().register(new HonorAppExceptionMapper());
     }
 
     private void setUpAuditLogging() {
